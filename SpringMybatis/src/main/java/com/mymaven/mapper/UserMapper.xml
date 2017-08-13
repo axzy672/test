@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+                "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+                
+<!-- namespace即命名空间，作用：sql语句的隔离(当前多用，后面还有重要作用)，即不同sql映射文件中的两个相同id的sql语句如何来区分
+	#{}作用：就是占位符，相当于JDBC中的"?"
+	parameterType：查询的参数类型
+	resultType：查询结果的数据类型
+-->
+
+<!-- mapper代理的开发规则：
+	1、namespace必须是接口的全限定名
+	2、StatementId必须和接口的方法名称一致
+	3、接口方法的参数类型要和parameterType要一致
+	4、接口方法的返回值类型要和resultType一致
+-->
+
+<mapper namespace="com.mymaven.mapper.UserMapper">
+
+    <!--根据id查询出用户信息(查询一条数据)-->
+    <select id="selectUserById" parameterType="long" resultType="com.mymaven.model.User">
+    select * from apply where id=#{id};
+    </select>
+    
+    <!--根据名称进行模糊查询(查询出多条数据)-->
+    <select id="selectUserByName" parameterType="String" resultType="com.mymaven.model.User">
+        SELECT * from apply WHERE Name LIKE #{Name}
+    </select>
+    
+    <!--根据学号进行精确查询-->
+    <select id="selectUserBystudentNumber" parameterType="int" resultType="com.mymaven.model.User">
+        SELECT * from apply WHERE student_number = #{student_number}
+    </select>
+    
+    <!--插入一个用户-->
+    <insert id="insertUser" parameterType="com.mymaven.model.User">
+      <selectKey keyProperty="id" resultType="long" order="AFTER" >
+      SELECT last_insert_id()
+      </selectKey>
+        INSERT INTO apply (Name,Qq,type,time,Graduate_School,student_number,Daily_link,hope,teacher,know_from,create_at,update_at) 
+        VALUES (#{Name},#{Qq},#{type},#{time},#{GraduateSchool},#{studentNumber},#{DailyLink},#{hope},#{teacher},#{knowFrom},#{createAt},#{updateAt})
+    </insert>
+    
+    <!--删除一个用户-->
+    <delete id="deleteUser" parameterType="long">
+      DELETE FROM apply WHERE id =#{id}
+    </delete>
+    <!--更新用户-->
+    
+    <update id="updateUser" parameterType="com.mymaven.model.User">
+      update apply set Name=#{Name},Qq=#{Qq},type=#{type},time=#{time},Graduate_School=#{GraduateSchool},student_number=#{studentNumber},Daily_link=#{DailyLink},hope=#{hope},teacher=#{teacher},know_from=#{knowFrom},create_at=#{createAt},update_at=#{updateAt} 
+      WHERE id = #{id}
+    </update>
+</mapper>
