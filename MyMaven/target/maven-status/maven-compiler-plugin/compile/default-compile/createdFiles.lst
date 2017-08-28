@@ -1,0 +1,3 @@
+com\mymaven\MyMaven\model\User.class
+com\mymaven\MyMaven\main\BatchInsert.class
+com\mymaven\MyMaven\mapper\UserMapper.class
